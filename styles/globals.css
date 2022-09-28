@@ -1,3 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&family=Urbanist:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.fancy-border{
+  border-top-right-radius: 305px;
+  border-top-left-radius: 155px;
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 0.5em;
+  height: 0.7em;
+}
+ 
+.custom-scroll::-webkit-scrollbar-track {
+  /* box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
+}
+ 
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #7c3aed;
+  outline: 1px solid #7c3aed;
+  border-radius:3px;
+}
+
+.bg-image {
+      background-image: url(https://i.postimg.cc/Pq2fJrXw/bg00.jpg);
+      background-size: cover;
+      background-position: center;
+    }
+.backdrop {
+      backdrop-filter: blur(5px);
+    }
+.text-shadow {
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+  
+
+
+
+@layer base {
+  .btn {
+    @apply rounded-lg  font-inter font-bold focus:outline-none transition duration-300 ease-in px-4 py-2;
+  }
+  .label {
+    @apply rounded-[5px]  font-inter font-semibold  focus:outline-none transition duration-300 ease-in ;
+  }
+
+  .btn-social{
+    @apply rounded-lg  font-inter font-medium focus:outline-none transition duration-300 ease-in px-4 py-1 w-32 bg-transparent border-[1px] border-gray-400 text-gray-400 shadow-md hover:shadow-2xl;
+  }
+}
+
+
+
