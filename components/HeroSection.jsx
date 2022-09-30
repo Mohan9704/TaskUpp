@@ -1,16 +1,17 @@
 import React from "react";
+import Footer from "./Footer";
 import Navbar from "./Navbar";
 import StarRating from "./StarRating";
 
 const HeroSection = () => {
   return (
-    <div className="relative max-w-7xl w-full bg-transparent min-h-screen space-y-10 z-20 ">
+    <div className="relative flex flex-col justify-between max-w-7xl w-full bg-transparent min-h-screen space-y-10 z-20 ">
       {/* NavBar */}
       <Navbar />
       {/* Main Section */}
       <div className="flex">
         {/* Left Side */}
-        <div className="flex flex-col mt-4">
+        <div className="flex flex-col ">
           <div className="flex flex-col  space-y-8 pt-10 px-6 w-[540px]">
             <h2 className=" text-6xl font-extrabold font-inter text-gray-900 dark:text-gray-100 leading-snug">
               One app to replace them all.
@@ -37,8 +38,8 @@ const HeroSection = () => {
                 Based on 1000+ reviews on
               </p>
             </div>
-            <div className="w-full h-full flex items-center px-2 space-x-4">
-              <img className="w-[100px] h-[48px]" src="/taskupp-brand-1.png" alt="" />
+            <div className="w-full h-full flex items-center px-2 space-x-4 -ml-8">
+              <img className="w-[150px] h-[78px]" src="/taskupp-brand-1.png" alt="" />
               <img className="w-[100px] h-[36px] pt-1" src="/taskupp-brand-2.png" alt="" />
               <img className="w-[120px] h-[36px] pt-1" src="/taskupp-brand-3.png" alt="" />
           </div>
@@ -48,10 +49,11 @@ const HeroSection = () => {
 
         {/* Right Side */}
         <div className="flex">
-          <img className="rounded-2xl w-[1000px] h-[550px]" src="/banner.jpg" />
+          <img className="rounded-2xl w-full h-[450px]" src="/banner-taskupp.png" />
         </div>
 
       </div>
+      <Footer />
     </div>
   );
 };

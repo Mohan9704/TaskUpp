@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { PlusSmIcon, DotsHorizontalIcon } from "@heroicons/react/solid";
-import TaskCard from "./TaskCard";
+import Taskcard from "./Taskcard";
 import EditableCard from "./EditableCard";
 import Dropdown from "./Dropdown";
 import { Droppable } from "react-beautiful-dnd";
@@ -15,10 +15,11 @@ const TaskBoard = ({
   handleAddTaskCard,
   handleRemoveTaskCard,
   handleUpdateTaskCard,
-  handleUpdateLabel
 }) => {
   const [showEditableTask, setShowEditableTask] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const boardTaskCards = cards?.filter(c => c.boardsID === boardId).reverse();
 
   const handleShowDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -44,7 +45,7 @@ const TaskBoard = ({
             <p className="text-lg text-gray-800 font-inter font-bold dark:text-gray-100 ">
               {boardTitle}{" "}
               <span className="text-md font-semibold font-inter text-gray-800 dark:text-gray-100">
-                ({cards.length})
+                ({boardTaskCards?.length})
               </span>
             </p>
             <div className="flex items-center  space-x-4">
@@ -56,7 +57,7 @@ const TaskBoard = ({
                 {showDropdown && (
                   <Dropdown card={false} onClose={handleShowDropdown}>
                     <div
-                      onClick={() => handleRemoveBoard(boardId)}
+                      onClick={async () => handleRemoveBoard(boardId)}
                       className="w-28 h-10 cursor-pointer rounded-md flex items-center justify-center bg-gray-300 dark:bg-gray-600"
                     >
                       <p className="flex text-sm font-inter font-semibold text-gray-800 dark:text-gray-100">
@@ -84,19 +85,20 @@ const TaskBoard = ({
                 handleAddTaskCard={handleAddTaskCard}
               />
             ) : null}
-            {cards?.map((card, index) => (
+            {boardTaskCards?.map((card, index) => (
               
-                <TaskCard
-                  key={card.id}
-                  index={index}
-                  cardId={card.id}
-                  card={card}
-                  boardId={boardId}
-                  handleRemoveTaskCard={handleRemoveTaskCard}
-                  handleUpdateTaskCard={handleUpdateTaskCard}         
-                />
-              
+              <Taskcard
+              key={card.id}
+              index={index}
+              cardId={card.id}
+              card={card}
+              boardId={boardId}
+              handleRemoveTaskCard={handleRemoveTaskCard}
+              handleUpdateTaskCard={handleUpdateTaskCard}         
+            />
             ))}
+
+           
           </div>
           <span style={{ display: 'none' }}>{provided.placeholder}</span>
         </div>

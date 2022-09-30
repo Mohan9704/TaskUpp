@@ -48,6 +48,7 @@ const TaskCardInfo = ({
   const [activeColor, setActiveColor] = useState("");
   const [newLabel, setNewLabel] = useState("");
   const [newTask, setNewTask] = useState("");
+  const [checked,setChecked] = useState(false);
 
   const handleEditField = (field) => {
     setEditField((prevValue) => {
@@ -130,7 +131,7 @@ const TaskCardInfo = ({
       text: newLabel,
       color: color ? color : "#8a5cf5",
     };
-
+ 
     setTempCard({ ...tempCard, labels: [...tempCard?.labels, label] });
     setNewLabel("");
     setActiveColor("");
@@ -147,25 +148,31 @@ const TaskCardInfo = ({
 
     setTempCard({ ...tempCard, labels: label });
 
-    // setEditField({ ...editField, labels: false });
   };
 
-  const handleTaskComplete = (taskId) => {
+  const handleTaskComplete = async (taskId) => {
     const index = tempCard?.tasks?.findIndex((item) => item.id === taskId);
 
     if (index < 0) {
       return;
     }
-
+    
     const tempTasks= [...tempCard?.tasks];
 
-    tempTasks[index].completed = !tempTasks[index].completed;
+    const tempTask = {
+      id: taskId,
+      title: tempTasks[index].title,
+      completed: !tempTasks[index].completed,
+    };
 
-    setTempCard({ ...tempCard, tasks: tempTasks});
+    tempTasks.splice(index,1);
+
+    setTempCard({ ...tempCard,tasks:[...tempTasks,tempTask ]});
+    setChecked(!checked);
   };
 
   const handleAddTasks = (task) => {
-    console.log(task)
+ 
     if (task === "" || task.length === 0) {
       return;
     }
@@ -179,7 +186,7 @@ const TaskCardInfo = ({
     setTempCard({ ...tempCard, tasks: [...tempCard?.tasks, tempTask] });
     setNewTask("");
 
-    // setEditField({ ...editField, tasks: false });
+  
   };
 
   const handleRemoveTasks = (taskId) => {
@@ -451,19 +458,17 @@ const TaskCardInfo = ({
                       >
                         <div className="flex space-x-3">
                           <input
-                            className={`focus:outline-violet-500 cursor-pointer `}
+                            className={`focus:outline-violet-500 cursor-pointer ${item.completed ? 'fill-violet-500': ''}`}
                             type="checkbox"
-                            value={item.completed}
-                            onClick={() => handleTaskComplete(item.id)}
                             defaultChecked={item.completed}
-                            defaultValue={item.completed}
+                            onClick={async () => handleTaskComplete(item.id)}                           
                           />
                           <p
-                            className={`font-medium  w-[350px] font-inter text-xs text-gray-900 dark:text-gray-100  ${
-                              item.completed
+                            className={`font-medium  w-[350px] font-inter text-xs text-gray-900 dark:text-gray-100   ${
+                              item.completed 
                                 ? "line-through decoration-green-400 decoration-[2px]"
                                 : ""
-                            }`}
+                            } `}
                           >
                             {item.title}
                           </p>
@@ -484,28 +489,27 @@ const TaskCardInfo = ({
                       >
                         <div className="flex space-x-3">
                           <input
-                            className={`focus:outline-violet-500 cursor-pointer `}
+                            className={`focus:outline-violet-500 cursor-pointer ${item.completed ? 'fill-violet-500': ''} `}
                             type="checkbox"
-                            value={item.completed}
-                            onClick={() => handleTaskComplete(item.id)}
                             defaultChecked={item.completed}
-                            defaultValue={item.completed}
+                            onClick={() => handleTaskComplete(item.id)}
                           />
                           <p
                             className={`font-medium w-4/5 min-w-full font-inter text-xs text-gray-800 dark:text-gray-100 ${
                               item.completed
-                                ? "line-through decoration-green-400 decoration-[2px]"
+                                ? "line-through decoration-green-400 decoration-[2px] "
                                 : ""
                             }`}
                           >
                             {item.title}
                           </p>
                         </div>
-                        {/* <TrashIcon onClick={() => handleRemoveTasks(item.id)} className=" w-4 h-4 text-violet-500 dark:text-violet-200 cursor-pointer " /> */}
+                      
                       </div>
                     ))}
                   </div>
 
+                    <div className="flex space-x-6">
                     <input
                       autoFocus
                       type="text"
@@ -516,7 +520,7 @@ const TaskCardInfo = ({
                       className="px-4 pr-2 py-3 w-[200px] rounded-md bg-gray-300 dark:bg-gray-700 text-sm font-normal group-hover:cursor-not-allowed text-gray-900 dark:text-gray-200 font-inter outline-none  transition duration-300 ease-in placeholder:text-gray-900 dark:placeholder:text-gray-300"
                     />
 
-                    <div className=" flex ml-1 ">
+                    <div className=" flex  p-2 ">
                       <button
                         onClick={() => handleAddTasks(newTask)}
                         className=" label bg-violet-200 dark:bg-violet-600 text-xs px-3 uppercase py-1 font-inter font-bold text-violet-600 dark:text-violet-200 shadow-md hover:shadow-2xl hover:opacity-80"
@@ -524,6 +528,8 @@ const TaskCardInfo = ({
                         Add
                       </button>
                     </div>
+                    </div>
+
                   </div>
                 )}
               </div>

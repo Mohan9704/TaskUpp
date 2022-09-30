@@ -5,53 +5,32 @@ import DashboardNav from "../components/DashboardNav";
 import DashboardHeader from "../components/DashboardHeader";
 import { PlusSmIcon } from "@heroicons/react/solid";
 import Head from "next/head";
-import { NewDate, UpdateDate } from "../utils";
 import NoteCard from "../components/NoteCard";
-import { v4 as uuid } from "uuid";
 import AddNoteModal from "../components/AddNoteModal";
 import { DataStore } from "@aws-amplify/datastore";
-import { UserProfile } from "../src/models";
+import { UserProfile, Notes } from "../src/models";
 
-const NOTES = [
-  {
-    id: uuid(),
-    title: "This is a First Note",
-    description: "This is a very long Desription",
-    priority: "High",
-    date: NewDate(),
-  },
-  {
-    id: uuid(),
-    title: "This is a Second Note",
-    description: "This is a short Desription",
-    priority: "Medium",
-    date: NewDate(),
-  },
-  {
-    id: uuid(),
-    title: "This is a Second Note",
-    description: "This is a short Desription",
-    priority: "Medium",
-    date: NewDate(),
-  },
-  {
-    id: uuid(),
-    title: "This is a Second Note",
-    description: "This is a short Desription",
-    priority: "Medium",
-    date: NewDate(),
-  },
-];
+// const NOTES = [
+//   {
+//     id: uuid(),
+//     title: "This is a First Note",
+//     description: "This is a very long Desription",
+//     priority: "High",
+//     date: NewDate(),
+//   },
 
-const Notes = () => {
+// ];
+
+const MyNotes = () => {
   const router = useRouter();
 
-  const [notes, setNotes] = useState(NOTES);
+  const [notes, setNotes] = useState();
   const [addNoteModal, setAddNoteModal] = useState(false);
+  const [noteAdded, setNoteAdded] = useState(false);
 
   const [user, setUser] = useState("");
   const [userAuthData, setUserAuthData] = useState("");
-  const [userInfo,setUserInfo] = useState("");
+  const [userInfo, setUserInfo] = useState("");
 
   useEffect(() => {
     const userAuth = async () => {
@@ -68,10 +47,16 @@ const Notes = () => {
       );
       console.log("User retrieved successfully!", data[0]);
       setUserInfo(data[0]);
+
+      const allNotes = await DataStore.query(Notes, (c) =>
+        c.userprofileID("eq", data[0]?.id)
+      );
+      console.log("All Boards", allNotes);
+      setNotes(allNotes);
     };
 
     userAuth();
-  }, []);
+  }, [noteAdded]);
 
   const handleLogout = async () => {
     try {
@@ -87,31 +72,47 @@ const Notes = () => {
     setAddNoteModal(!addNoteModal);
   };
 
-  const handleAddNewNote = (title, description, priority,date) => {
+  const handleAddNewNote = async (title, description, priority, date) => {
     console.log("Note Added!!");
-    const newDate= UpdateDate(date);
-    const newNote = {
-      id: uuid(),
-      title: title,
-      description: description,
-      priority: priority,
-      date: newDate,
-    };
-    setNotes([...notes, newNote]);
-    
-    setAddNoteModal(false)
+    // const newDate= UpdateDate(date);
+    if (title === "" || title === null) {
+      alert("Please Enter a title");
+    }
+
+    if (description === null || description === null) {
+      alert("Please Enter a description");
+    }
+
+    if (priority === "" || priority === null) {
+      alert("Please Enter a priority");
+    }
+
+    if (date === "" || date === null) {
+      alert("Please Enter a date");
+    }
+
+    await DataStore.save(
+      new Notes({
+        title: title,
+        description: description,
+        priority: priority,
+        date: date,
+        userprofileID: userInfo?.id,
+      })
+    );
+
+    setAddNoteModal(false);
+    setNoteAdded(!noteAdded);
   };
 
-  const handleDeleteNote = (noteId) => {
+  const handleDeleteNote = async (noteId) => {
     console.log("Note Deleted");
 
-    const index = notes?.findIndex((item) => item.id === noteId);
+    const todelete = await DataStore.query(Notes, noteId);
 
-    const tempNotes = [...notes];
+    DataStore.delete(todelete);
 
-    tempNotes.splice(index, 1);
-
-    setNotes(tempNotes);
+    setNoteAdded(!noteAdded);
   };
 
   return (
@@ -127,7 +128,7 @@ const Notes = () => {
               <DashboardNav username={user} handleLogout={handleLogout} />
             </div>
             <div className=" h-full lg:col-span-10 flex  flex-col space-y-2 py-3 px-3  transition duration-300 ease-in bg-gray-100 dark:bg-gray-900 ">
-              <DashboardHeader username={user} imageUrl={userInfo?.imageUrl}/>
+              <DashboardHeader username={user} imageUrl={userInfo?.imageUrl} />
 
               {/* <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 text-center">
                 Welcome @{user}, your email is {userAuthData.email}.
@@ -151,7 +152,7 @@ const Notes = () => {
                 </div>
 
                 <div className=" grid grid-cols-4 items-center gap-4 px-4 transition duration-300 ease-in">
-                  {notes.map((note) => (
+                  {notes?.map((note) => (
                     <NoteCard
                       key={note.id}
                       noteId={note.id}
@@ -178,4 +179,4 @@ const Notes = () => {
   );
 };
 
-export default Notes;
+export default MyNotes;

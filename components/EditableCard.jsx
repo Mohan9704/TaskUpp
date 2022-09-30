@@ -16,7 +16,7 @@ import { XIcon, PlusSmIcon } from "@heroicons/react/solid";
             type="text"
             id="tasktitle"
             value={taskTitle}
-            onChange={(e) => setTaskTitle(e.target.value)}
+            onChange={ (e) => setTaskTitle(e.target.value)}
             placeholder="Enter Task Title"
             className="pl-2 py-1 rounded-md bg-gray-100 dark:bg-gray-900/70 text-sm font-normal group-hover:cursor-not-allowed text-gray-900 dark:text-gray-200 font-inter outline-none  w-full  transition duration-300 ease-in placeholder:text-gray-900 dark:placeholder:text-gray-300"
           />
@@ -34,7 +34,7 @@ import { XIcon, PlusSmIcon } from "@heroicons/react/solid";
           />
         </div>
         <div  className="flex items-center space-x-8">
-          <div onClick={() => handleAddTaskCard (taskTitle,taskDescription ,boardId,setTaskTitle,onClose)} className="flex items-center space-x-4  bg-gray-200 dark:bg-gray-800 rounded-lg py-2 px-3 cursor-pointer hover:ring-2 ring-gray-500  dark:ring-gray-300 transition duration-300 ease-in">
+          <div onClick={ () =>  handleAddTaskCard (taskTitle,taskDescription ,boardId,setTaskTitle,onClose)} className="flex items-center space-x-4  bg-gray-200 dark:bg-gray-800 rounded-lg py-2 px-3 cursor-pointer hover:ring-2 ring-gray-500  dark:ring-gray-300 transition duration-300 ease-in">
             <p className="text-xs text-gray-800 font-inter font-semibold dark:text-gray-100">
               Add Task
             </p>

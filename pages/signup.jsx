@@ -4,9 +4,10 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { Auth } from "aws-amplify";
 import Onboarding from "../components/Onboarding";
-import  { DataStore } from '@aws-amplify/datastore';
-import  { UserProfile } from '../src/models';
+import { DataStore } from "@aws-amplify/datastore";
+import { UserProfile, Boards, Notes , TaskCard} from "../src/models";
 import Head from "next/head";
+import { v4 as uuid } from "uuid";
 
 const signup = () => {
   const router = useRouter();
@@ -27,7 +28,7 @@ const signup = () => {
       const { username, attributes } = await Auth.currentAuthenticatedUser();
       setUserAuthData(attributes);
       setUser(username);
-      console.log(user, userAuthData);
+      
     };
 
     getAuthUser();
@@ -68,25 +69,63 @@ const signup = () => {
 
   ////////// Handling Onboarding ////////////
 
-  const handleOnBoard =async () => {
-    if (
-      displayName === "" ||
-      displayName === null 
-    ) {
+  const handleOnBoard = async () => {
+    if (displayName === "" || displayName === null) {
       alert("Please Enter your Display Name ");
       return;
     }
-    await DataStore.save(
-      new UserProfile({
-      "username": username,
-      "email": email,
-      "displayName": displayName,
-      "imageUrl":  imageUrl,
-      "password": password
-    })
-  );
 
-    console.log("UserProfile:",{username, email, password, displayName, imageUrl});
+    if(imageUrl === "" || imageUrl === null){
+      imageUrl ="https://freesvg.org/img/abstract-user-flat-4.png";
+    }
+
+    const userprofile = await DataStore.save(
+      new UserProfile({
+        username: username,
+        email: email,
+        displayName: displayName,
+        imageUrl: imageUrl,
+        password: password,
+        notes: [],
+        boards: [],
+      })
+    );
+
+   const board = await DataStore.save(
+      new Boards({
+        boardTitle: "To Do ",
+        userprofileID: userprofile.id,
+        cards: [],
+      })
+    );
+    
+    await DataStore.save(
+      new TaskCard({
+            title: "Welcome to TaskUpp App",
+            tasks: [{ id:uuid(),title: "Your First Task", completed: false}],
+            labels: [{id:uuid(), text: "frontend", color: "#b82ed6" }],
+            description:"Create your First Task",
+            date: new Date().toISOString().substring(0, 10),
+            boardsID:board.id,
+      })
+    )
+    await DataStore.save(
+      new Notes({
+        title: "This is a Note",
+        description: "This is Desription",
+        priority: "Medium",
+        date: new Date().toISOString().substring(0, 10),
+        userprofileID: userprofile.id,
+      })
+    );
+
+    console.log("UserProfile:", {
+      username,
+      email,
+      password,
+      displayName,
+      imageUrl,
+    });
     setFormType("signedIn");
     router.push("/dashboard");
   };

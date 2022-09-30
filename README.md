@@ -1,27 +1,112 @@
-# Next.js + Tailwind CSS Example
+# Build with Linode Hackathon (Linode X Hashnode) — June 2022
+  
+  ![Linode X AWS Amplify Hackathon](./public/sponsor-hashnode.png)
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.0)](https://tailwindcss.com/blog/tailwindcss-v3) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+### Project Task
 
-## Deploy your own
+**To Build an exciting Open-Source app of your choice using AWS Amplify as Backend and its other features during the whole of September. Publish an article on your Hashnode blog about the process of creating and launching your app for a chance to win one of the 15 cash prizes and swags!**
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
+[Live Demo URL](https://taskupp.vercel.app)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
 
-## How to use
+![Poject Final View](./public/taskupp.PNG)
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+### Project Overview
+
+It consits of :
+
+* Header
+* Hero Section
+* Onboarding Page
+* Profile Setting Page
+* Dashboard Page
+* Notes Page
+* Footer
+* Dark Mode & Light Mode Functionality
+
+and many more components...
+
+### Tech Stack Used
+
+**This is my all-time favorite tech stack:**
+
+- Next.js (Fullstack Framework for React.js)
+- React.js (Front-end UI Library)
+- Tailwind CSS (CSS Framework)
+- AWS Amplify Studio (For Database)
+- Vercel (For Hosting the App)
+
+### UI Resources Used
+
+* Images - (Google Images)
+* SVG Icons - (Hero Icons by Tailwind CSS)
+* Fonts (Inter, Manrope & Urbanist)- (Google fonts)
+
+
+### How to use  TaskUpp
+
+1. First, visit the taskupp.com , and sign up using email, username and password.
+
+2. After that you will be redirected to Onboarding Page.
+
+3. Then, you will be redirected to the dashboard.
+
+4. You can update your profile in the profile tab.
+
+5. On the Dashboard you can Add a Board and Inside that Board you can Add Tasks.
+
+6. You can (Drag and Drop your Task cards Between Different Boards).
+
+7. You can Create, Delete, Edit and your Task cards and Notes.
+
+
+### The Code
+
+Steps to run the app locally:
+
+
+#### Step-1: Git Clone the project
 
 ```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
+   git clone https://github.com/raiv200/TaskUpp.git
 ```
+
+#### Step-2: Install the dependencies
 
 ```bash
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
+  npm install
 ```
+
+#### Step-3: You do need to create Aws Amplify Account and the various Schema Models
+
+ 1. Go o aws.amazon.com and Sign Up.
+ 2. After that, in the search type Amplify Studio and click on it.
+ 3. Set up Amplify Studio by giving a suitable name for the app and set environment to dev mode.
+ 4. Then after that you will see something like Launch Amplify Studio. Click on it and proceed.
+
+ After that follow step 4.
+
+
+#### Step-4: Create Schema Models
+
+ 1. I have used (username with email) as a part of AWS Amplify Authentication.
+
+ 2. For the Schema Models, here is a screenshot of the Schema Models that I Created.
+
+![Schema Model 1](./public/model-1.PNG)
+![Schema Model 2](./public/model-2.PNG)
+![Schema Model 3](./public/model-3.PNG)
+![Schema Model 4](./public/model-4.PNG)
+![Schema Model 5](./public/model-5.PNG)
+![Schema Model 6](./public/model-6.PNG)
+
+
+#### Step-5: Start the development server
+
+Now open your project in your favorite IDE , (VsCode) and then start the development server.
 
 ```bash
-pnpm create next-app --example with-tailwindcss with-tailwindcss-app
+   npm run dev
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+

@@ -21,7 +21,7 @@ const SignUp = ({
   handleSignUp,
 }) => {
   return (
-    <div className="relative flex flex-col min-h-screen bg-gray-50 z-10 overflow-hidden">
+    <div className="relative flex flex-col min-h-screen bg-gray-50  dark:bg-gray-900 z-10 overflow-hidden">
       {/* SignUp Nav Section   */}
       <div className="flex justify-between mx-auto max-w-7xl w-full h-16 bg-transparent mt-4">
         <div className="flex items-center">
@@ -30,7 +30,7 @@ const SignUp = ({
         </div>
         {/* Log In Button */}
         <div className="flex items-center space-x-4">
-          <p className="text-md font-inter font-semibold text-gray-800">
+          <p className="text-md font-inter font-semibold text-gray-800 dark:text-gray-100">
             Already playing with TaskUpp?
           </p>
           <Link href="/login">
@@ -43,11 +43,11 @@ const SignUp = ({
         </div>
       </div>
 
-      <div className="pt-4 flex flex-col bg-gray-50 shadow-2xl w-[450px] h-[580px] rounded-2xl z-20 mx-auto mt-2">
+      <div className="pt-4 flex flex-col bg-gray-50 shadow-2xl w-[450px] h-[520px] rounded-2xl z-20 mx-auto mt-2">
         <div className="flex justify-center ">
           <Logo />
         </div>
-        <div className="flex flex-col space-y-4 flex-1 px-12 py-4 pt-6">
+        <div className="flex flex-col space-y-6 flex-1 px-12 py-4 pt-6">
           <div className="flex items-center justify-center text-3xl font-inter font-bold text-gray-800">
             Sign Up
           </div>
@@ -106,37 +106,12 @@ const SignUp = ({
           <button
             onClick={handleSignUp}
             type="submit"
-            className="w-full btn bg-violet-600 px-5 py-3 text-white shadow-2xl shadow-violet-400 hover:shadow-2xl hover:opacity-80"
+            className="w-full btn bg-violet-600 px-5 py-3 text-white shadow-2xl shadow-violet-400 hover:shadow-2xl hover:opacity-80 "
           >
             Play with TaskUpp
           </button>
 
-          {/* Or Continue with  */}
-
-          <div className="flex items-center justify-between">
-            <div className="border-t-[1px] border-gray-400 w-[125px]"></div>
-            <p className=" text-xs text-center font-inter font-semibold text-violet-600">
-              Or signup with
-            </p>
-            <div className="border-t-[1px] border-gray-400 w-[120px]"></div>
-          </div>
-
-          {/* Custom Login using Google , Github, Twitter  */}
-          <div className="flex justify-between space-x-4 items-center w-full  border-violet-500 ">
-            <button className="btn-social bg-gray-50 flex justify-center">
-              <AiOutlineGooglePlus className=" text-rose-500" size="2rem" />
-            </button>
-
-            <button className="btn-social bg-gray-50 flex justify-center">
-              <AiOutlineGithub className=" text-gray-900" size="2rem" />
-            </button>
-
-            <button className="btn-social bg-gray-50 flex justify-center">
-              <AiOutlineTwitter className=" text-cyan-300" size="2rem" />
-            </button>
-          </div>
-
-          {/* <a href="/signup-magiclink" className="text-xs text-center font-inter font-normal text-violet-600">or Sign Up with Magic Link</a> */}
+          
         </div>
 
         <div className="w-full text-center ">

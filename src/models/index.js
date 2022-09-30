@@ -4,8 +4,13 @@ import { schema } from './schema';
 
 
 
-const { UserProfile } = initSchema(schema);
+const { TaskCard, Boards, Notes, UserProfile, Task, Label } = initSchema(schema);
 
 export {
-  UserProfile
+  TaskCard,
+  Boards,
+  Notes,
+  UserProfile,
+  Task,
+  Label
 };

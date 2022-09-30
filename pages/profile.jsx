@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Auth } from "aws-amplify";
 import DashboardNav from "../components/DashboardNav";
-import Link from "next/link";
 import DashboardHeader from "../components/DashboardHeader";
 import ChangePasswordModal from "../components/ChangePasswordModal";
 import {
@@ -48,28 +47,20 @@ const Profile = () => {
     console.log("Password Changed");
   };
 
-  const handleDisplayName = (e) => {
-    setDisplayName(e.target.value);
-  };
-
-  const handleImageUrl = (e) => {
-    setImageUrl(e.target.value);
-  };
 
   useEffect(() => {
     const userAuth = async () => {
       const user = await Auth.currentAuthenticatedUser();
-      //   const data = await Auth.getUserData();
+     
       const { username, attributes } = user;
-      // console.log(username);
-      //   console.log(data);
+    
       setUser(username);
       setUserAuthData(attributes);
 
       const data = await DataStore.query(UserProfile, (c) =>
         c.username("eq", username)
       );
-      console.log("User retrieved successfully!", data[0]);
+      
       setUserInfo(data[0]);
       setDisplayName(data[0]?.displayName);
       setImageUrl(data[0]?.imageUrl);
@@ -87,7 +78,7 @@ const Profile = () => {
   ) => {
     const original = await DataStore.query(UserProfile, id);
 
-    console.log("ORiginal DAta", original);
+    
 
     await DataStore.save(
       UserProfile.copyOf(original, (updated) => {
@@ -96,12 +87,11 @@ const Profile = () => {
       })
     );
 
-    console.log("ID: ", id);
-    console.log("NAME: ", updatedDisplayName);
+    
   };
 
   const handleUpdateProfile = () => {
-    console.log(displayName, imageUrl);
+    
     saveUpdatedProfile(id, displayName, imageUrl);
   };
 
@@ -115,7 +105,7 @@ const Profile = () => {
     }
   };
 
-  // console.log("User Profile", userInfo);
+ 
 
   return (
     <div>
@@ -132,9 +122,7 @@ const Profile = () => {
             <div className="h-full lg:col-span-10 flex  flex-col py-3 px-3 space-y-2 transition duration-300 ease-in bg-gray-100 dark:bg-gray-900">
               <DashboardHeader username={user} imageUrl={imageUrl}/>
 
-              {/* <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 text-center">
-                Welcome @{user}, your email is {userAuthData.email}.
-              </h1> */}
+              
               <div className=" flex flex-col items-center z-10 h-[648px] w-full bg-gray-200  dark:bg-gray-800/50 py-2 px-3 border-2 border-dashed border-gray-800 dark:border-gray-100 rounded-lg transition duration-300 ease-in">
                 <h2 className="text-3xl font-semibold font-inter text-gray-800 dark:text-gray-100 transition duration-300 ease-in">
                   My Profile

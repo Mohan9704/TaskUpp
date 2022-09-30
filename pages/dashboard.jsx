@@ -7,11 +7,9 @@ import TaskBoard from "../components/TaskBoard";
 import { PlusSmIcon } from "@heroicons/react/solid";
 import NewBoard from "../components/NewBoard";
 import { DragDropContext } from "react-beautiful-dnd";
-import { v4 as uuid } from "uuid";
-import { NewDate } from "../utils";
 import Head from "next/head";
 import { DataStore } from "@aws-amplify/datastore";
-import { UserProfile } from "../src/models";
+import { UserProfile, Boards, TaskCard } from "../src/models";
 
 // const BOARDS = [
 //   {
@@ -23,7 +21,7 @@ import { UserProfile } from "../src/models";
 //         title: "Complete the Hackathon Project before 30th September.",
 //         tasks: [
 //           { id: uuid(), title: "Your Task", completed: false },
-          
+
 //         ],
 //         labels: [
 //           { id: uuid(), text: "Label", color: "#b82ed6" }
@@ -31,7 +29,7 @@ import { UserProfile } from "../src/models";
 //         description: "This is Description 1.",
 //         date: "",
 //       },
-      
+
 //     ],
 //   },
 // ];
@@ -39,37 +37,45 @@ import { UserProfile } from "../src/models";
 const Dashboard = () => {
   const router = useRouter();
 
-  const [boards, setBoards] = useState([]);
+  const [boards, setBoards] = useState();
+  const [allTaskCards, setAllTaskCards] = useState();
+  const [taskAdded, setTaskAdded] = useState(false);
+  const [boardAdded, setBoardAdded] = useState(false);
 
   const [user, setUser] = useState("");
-  const [userInfo,setUserInfo]= useState("");
+  const [userInfo, setUserInfo] = useState("");
   const [userAuthData, setUserAuthData] = useState("");
   const [newBoardTitle, setNewBoardTitle] = useState("");
   const [showEditableBoard, setShowEditableBoard] = useState(false);
 
-
   useEffect(() => {
     const userAuth = async () => {
       const user = await Auth.currentAuthenticatedUser();
-      //   const data = await Auth.getUserData();
+      
       const { username, attributes } = user;
-      // console.log(username);
-      //   console.log(data);
+      
       setUser(username);
       setUserAuthData(attributes);
 
       const data = await DataStore.query(UserProfile, (c) =>
         c.username("eq", username)
       );
-      console.log("User retrieved successfully!", data[0]);
+      
       setUserInfo(data[0]);
+
+      const allBoards = await DataStore.query(Boards, (c) =>
+        c.userprofileID("eq", data[0]?.id)
+      );
+     
+      setBoards(allBoards);
+
+      const allTaskCards = await DataStore.query(TaskCard);
+      
+      setBoards(allBoards);
+      setAllTaskCards(allTaskCards);
     };
-
     userAuth();
-  }, []);
-
-    
-
+  }, [taskAdded, boardAdded]);
 
   /// ADD BOARD AND DELETE BOARD
 
@@ -77,37 +83,42 @@ const Dashboard = () => {
     setNewBoardTitle(e.target.value);
   };
 
-  const handleAddBoard = (boardTitle) => {
-    console.log("Board Added", boardTitle);
-
-    setBoards([
-      ...boards,
-      {
-        id: uuid(),
-        boardTitle: boardTitle,
-        cards: [],
-      },
-    ]);
-
-    setShowEditableBoard(!showEditableBoard);
-    setNewBoardTitle("");
-  };
-
-  const handleRemoveBoard = (boardId) => {
-    console.log("Board Removed !!");
-
-    const tempBoards = boards.filter((item) => item.id !== boardId);
-
-    setBoards(tempBoards);
-  };
-
   const handleShowEditableBoard = () => {
     setShowEditableBoard(!showEditableBoard);
   };
 
+  const handleAddBoard = async (boardTitle) => {
+    console.log("Board Added", boardTitle);
+
+    const userprofile = await DataStore.query(UserProfile, (c) =>
+      c.username("eq", user)
+    );
+
+    await DataStore.save(
+      new Boards({
+        boardTitle: boardTitle,
+        cards: [],
+        userprofileID: userInfo?.id,
+      })
+    );
+
+    setShowEditableBoard(!showEditableBoard);
+    setNewBoardTitle("");
+    setBoardAdded(!boardAdded);
+  };
+
+  const handleRemoveBoard = async (boardId) => {
+    console.log("Board Removed !!");
+
+    const todelete = await DataStore.query(Boards, boardId);
+    DataStore.delete(todelete);
+
+    setBoardAdded(!boardAdded);
+  };
+
   /// ADD CARD , UPADTE CARD AND DELETE CARD
 
-  const handleAddTaskCard = (
+  const handleAddTaskCard = async (
     title,
     description,
     boardId,
@@ -116,31 +127,24 @@ const Dashboard = () => {
   ) => {
     console.log("Task Card Added", title);
 
-    const card = {
-      id: uuid(),
-      title: title,
-      labels: [],
-      tasks: [],
-      description: description,
-      date:new Date().toISOString().substring(0,10),
-    };
+    await DataStore.save(
+      new TaskCard({
+        title: title,
+        labels: [],
+        tasks: [],
+        description: description,
+        date: new Date().toISOString().substring(0, 10),
+        boardsID: boardId,
+      })
+    );
 
-    const boardIndex = boards.findIndex((item) => item.id === boardId);
-
-    if (boardIndex < 0) {
-      return;
-    }
-
-    const tempBoards = [...boards];
-
-    tempBoards[boardIndex].cards.push(card);
-
-    setBoards(tempBoards);
+    
     setShowEditableTask(false);
     setTaskTitle("");
+    setTaskAdded(!taskAdded);
   };
 
-  const handleUpdateTaskCard = (
+  const handleUpdateTaskCard = async (
     boardId,
     cardId,
     updatedCard,
@@ -148,54 +152,41 @@ const Dashboard = () => {
   ) => {
     console.log("Task Card Updated");
 
-    const boardIndex = boards.findIndex((item) => item.id === boardId);
+    const original = await DataStore.query(TaskCard, cardId);
 
-    if (boardIndex < 0) {
-      return;
-    }
-
-    const cardIndex = boards[boardIndex]?.cards.findIndex(
-      (item) => item.id === cardId
+    await DataStore.save(
+      TaskCard.copyOf(original, (updated) => {
+        updated.title = updatedCard.title;
+        updated.tasks = [...updatedCard.tasks];
+        updated.labels = [...updatedCard.labels];
+        updated.description = updatedCard.description;
+        updated.date = updatedCard.date;
+      })
     );
 
-    if (cardIndex < 0) {
-      return;
-    }
-
-    const tempBoards = [...boards];
-    tempBoards[boardIndex].cards[cardIndex] = updatedCard;
-
-    console.log(updatedCard);
-
-    setBoards(tempBoards);
+    
+    setTaskAdded(!taskAdded);
     handleShowModal();
   };
 
-  const handleRemoveTaskCard = (cardId, boardId) => {
-    const boardIndex = boards.findIndex((item) => item.id === boardId);
-    if (boardIndex < 0) {
-      return;
-    }
+  const handleRemoveTaskCard = async (cardId, boardId) => {
+    console.log("Card Removed !!");
 
-    const cardIndex = boards[boardIndex].cards.findIndex(
-      (item) => item.id === cardId
-    );
-    if (cardIndex < 0) {
-      return;
-    }
+    const todelete = await DataStore.query(TaskCard, cardId);
 
-    const tempBoards = [...boards];
+    DataStore.delete(todelete);
 
-    tempBoards[boardIndex].cards.splice(cardIndex, 1);
-    setBoards(tempBoards);
+    setTaskAdded(!taskAdded);
+
+    
   };
 
   /// ADDING DRAGGABLE CARD FUNCTIONALITY
 
-  const onDragEnd = (result, boards, setBoards) => {
+  const onDragEnd = async (result, boards) => {
     if (!result.destination) return;
 
-    const { source, destination } = result;
+    const { source, destination, draggableId } = result;
 
     let source_BoardIndex, target_BoardIndex;
 
@@ -215,19 +206,32 @@ const Dashboard = () => {
       return;
     }
 
-    const tempBoards = [...boards];
-    const tempCard = tempBoards[source_BoardIndex]?.cards[source.index];
+    const tempCards = [...allTaskCards];
+    
+    
+    const tempCard =  await DataStore.query(TaskCard, draggableId);
+    
+    
+    await DataStore.save(
+      new TaskCard({
+        title: tempCard.title,
+        tasks: tempCard.tasks,
+        labels: tempCard.labels,
+        description: tempCard.description,
+        date: tempCard.date,
+        boardsID: destination.droppableId,
+      })
+      );
+      
+      DataStore.delete(tempCard);
+      
+      
+      setTaskAdded(!taskAdded);
 
-    tempBoards[source_BoardIndex].cards.splice(source.index, 1);
-
-    tempBoards[target_BoardIndex].cards.splice(destination.index, 0, tempCard);
-
-    setBoards(tempBoards);
+    
   };
 
   /// USER AUTHENTICATION AND USER lOGOUT
-
-  
 
   const handleLogout = async () => {
     try {
@@ -246,16 +250,14 @@ const Dashboard = () => {
         <link rel="icon" href="/taskupp-logo.png" />
       </Head>
       {userAuthData.email_verified && (
-        
         <>
           <div className="flex  flex-col lg:grid lg:grid-cols-12  ">
             <div className=" h-screen sticky top-0 flex-col lg:col-span-2 ">
               <DashboardNav username={user} handleLogout={handleLogout} />
             </div>
             <div className=" h-full lg:col-span-10 flex flex-col space-y-2 py-3 px-3  transition duration-300 ease-in bg-gray-100 dark:bg-gray-900 ">
-              <DashboardHeader username={user} imageUrl={userInfo.imageUrl}   />
+              <DashboardHeader username={user} imageUrl={userInfo?.imageUrl} />
 
-              
               <DragDropContext
                 onDragEnd={(result) => onDragEnd(result, boards, setBoards)}
               >
@@ -267,7 +269,7 @@ const Dashboard = () => {
                       type="TASK"
                       boardId={board.id}
                       boardTitle={board.boardTitle}
-                      cards={board.cards}
+                      cards={allTaskCards}
                       handleRemoveBoard={handleRemoveBoard}
                       handleAddTaskCard={handleAddTaskCard}
                       handleRemoveTaskCard={handleRemoveTaskCard}

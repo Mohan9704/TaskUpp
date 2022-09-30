@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { XIcon, PlusSmIcon } from "@heroicons/react/solid";
 
 const NewBoard = ({newBoardTitle, handleNewBoardTitle, handleAddBoard, onClose}) => {
@@ -20,7 +20,7 @@ const NewBoard = ({newBoardTitle, handleNewBoardTitle, handleAddBoard, onClose})
       </div>
       <div className="flex items-center space-x-8">
         <div
-          onClick={() => handleAddBoard(newBoardTitle)}
+          onClick={async () => handleAddBoard(newBoardTitle)}
           className="flex items-center space-x-4  bg-gray-300 dark:bg-gray-700 rounded-lg py-2 px-3 cursor-pointer hover:ring-2 ring-gray-500  dark:ring-gray-300 transition duration-300 ease-in"
         >
           <p className="text-xs text-gray-800 font-inter font-semibold dark:text-gray-100">

@@ -47,14 +47,14 @@ const Navbar = () => {
       <div className="flex items-center space-x-6">
         <Link href="/signup">
           <a>
-            <button className="btn text-md bg-gray-50 text-violet-600 hover:bg-violet-500 hover:text-gray-50 shadow-md shadow-violet-500 hover:-translate-y-1">
+            <button className="btn text-md bg-gray-50 text-violet-600 hover:bg-violet-500 hover:text-gray-50 shadow-2xl hover:shadow-violet-500 hover:-translate-y-1">
               Sign Up
             </button>
           </a>
         </Link>
         <Link href="/login">
           <a>
-            <button className="btn text-md bg-gray-200/30 text-gray-50 hover:bg-gray-200/30 hover:-translate-y-1">
+            <button className="btn text-md bg-gray-800/80 dark:bg-gray-200/30  text-gray-50 hover:bg-gray-700/70 hover:-translate-y-1">
               Log In
             </button>
           </a>

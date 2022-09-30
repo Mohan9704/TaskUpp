@@ -5,7 +5,7 @@ import Dropdown from "./Dropdown";
 import { DotsHorizontalIcon } from "@heroicons/react/solid";
 import { Draggable } from "react-beautiful-dnd";
 import TaskCardInfo from "./TaskCardInfo";
-import { UpdateDate } from "../utils";
+
 
 const TaskCard = ({
   index,
@@ -36,11 +36,11 @@ const TaskCard = ({
   };
 
   const truncateString = (str, num) => {
-    if (str.length <= num) {
+    if (str?.length <= num) {
       return str;
     }
     // Return str truncated with '...' concatenated to the end of str.
-    return str.slice(0, num) + " ...";
+    return str?.slice(0, num) + " ...";
   };
 
   const handleShowDropdown = () => {
@@ -61,9 +61,7 @@ const TaskCard = ({
                 : "bg-gray-50 dark:bg-gray-700/70 bg-opacity-100"
             } relative flex flex-col backdrop space-y-4 mx-auto w-[257px]   rounded-2xl px-3 py-4 text-white border border-gray-300  cursor-pointer shadow-sm hover:shadow-2xl dark:hover:shadow-2xl shadow-gray-400 dark:shadow-gray-900 dark:hover:shadow-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700/100 transition duration-300 ease-in`}
           >
-            {/* <p className="text-sm  font-inter selection:font-semibold text-rose-600 bg-rose-200 rounded-lg p-1">
-          High
-        </p> */}
+           
 
             <div
               onClick={handleShowModal}
@@ -90,7 +88,7 @@ const TaskCard = ({
               {showDropdown && (
                 <Dropdown card={true} onClose={handleShowDropdown}>
                   <div
-                    onClick={() => handleRemoveTaskCard(cardId, boardId)}
+                    onClick={async () => handleRemoveTaskCard(cardId, boardId)}
                     className="w-28 h-10 cursor-pointer rounded-md flex items-center justify-center bg-gray-300/50 dark:bg-gray-800"
                   >
                     <p className="flex text-sm font-inter font-semibold text-gray-800 dark:text-gray-100">
@@ -151,10 +149,3 @@ const TaskCard = ({
 
 export default TaskCard;
 
-// {
-/* <img
-          src="https://i.postimg.cc/SxLx0fHV/bg01.jpg"
-          alt="image1"
-          className="w-full h-28 object-cover mb-2"
-        /> */
-// }
