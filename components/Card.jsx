@@ -7,7 +7,7 @@ import { Draggable } from "react-beautiful-dnd";
 import TaskCardInfo from "./TaskCardInfo";
 
 
-const Taskcard = ({
+const Card = ({
   index,
   cardId,
   card,
@@ -147,5 +147,5 @@ const Taskcard = ({
   );
 };
 
-export default Taskcard;
+export default Card;
 

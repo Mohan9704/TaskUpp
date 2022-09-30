@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { PlusSmIcon, DotsHorizontalIcon } from "@heroicons/react/solid";
-import Taskcard from "./Taskcard";
+import Card from "./Card";
 import EditableCard from "./EditableCard";
 import Dropdown from "./Dropdown";
 import { Droppable } from "react-beautiful-dnd";
@@ -87,7 +87,7 @@ const TaskBoard = ({
             ) : null}
             {boardTaskCards?.map((card, index) => (
               
-              <Taskcard
+              <Card
               key={card.id}
               index={index}
               cardId={card.id}
