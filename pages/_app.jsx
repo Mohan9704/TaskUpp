@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 
 import { Amplify } from "aws-amplify";
-import awsconfig from "../src/aws-exports";
+import awsconfig from "../aws-exports";
 import { ThemeProvider } from "next-themes";
 
 Amplify.configure(awsconfig);
