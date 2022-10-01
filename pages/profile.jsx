@@ -45,6 +45,7 @@ const Profile = () => {
 
   const handleChangePassword = () => {
     console.log("Password Changed");
+    setShowPasswordModal(!showPasswordModal);
   };
 
 
