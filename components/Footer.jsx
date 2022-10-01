@@ -19,7 +19,7 @@ const Footer = () => {
   return (
     <footer className="flex justify-center items-center space-x-56  w-full  py-4 -ml-10">
       <div className="text-center text-sm text-gray-500">
-        <span className="dark:text-gray-100 text-gray-900 font-bold text-lg mr-2"> taskUpp.com </span>{" "}
+        <span className="dark:text-gray-100 text-gray-900 font-bold text-lg mr-2"> taskUpp.in </span>{" "}
         &copy; {new Date().getFullYear()} All Rights Reserved
       </div>
       {/* Linode X Hashnode Hackathon */}
