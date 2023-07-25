@@ -1,10 +1,8 @@
-# Build with Linode Hackathon (Linode X Hashnode) — June 2022
-  
-  ![Linode X AWS Amplify Hackathon](./public/sponsor-hashnode.png)
+# Build with AWS Amplify HACKATHON July 2023
 
 ### Project Task
 
-**To Build an exciting Open-Source app of your choice using AWS Amplify as Backend and its other features during the whole of September. Publish an article on your Hashnode blog about the process of creating and launching your app for a chance to win one of the 15 cash prizes and swags!**
+**To Build an exciting Open-Source app of your choice using AWS Amplify as Backend and its other features during the whole of July. Publish an article on your Hashnode blog about the process of creating and launching your app**
 
 [Live Demo URL](https://taskupp.vercel.app)
 
